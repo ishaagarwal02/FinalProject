@@ -1,4 +1,5 @@
 let usaMap;
+let matrixChart;
 
 let promises = [
     //JSON States map projection
@@ -19,5 +20,10 @@ Promise.all(promises)
 
 function initMainPage(allDataArray){
     usaMap = new MapVis('mapDiv', allDataArray[0])
+    matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
 
 };
+
+function switchMatrixView() {
+    matrixChart.updateChart();
+}
