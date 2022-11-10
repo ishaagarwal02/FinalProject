@@ -7,7 +7,14 @@ let promises = [
 ]
 
 Promise.all(promises)
-    .then(function(){})
+    .then(function(data){
+        initMainPage(data)
+    })
     .catch(function (err){
         console.log(err)
     });
+
+function initMainPage(allDataArray){
+    usaMap = new MapVis('mapDiv', allDataArray[0])
+
+};

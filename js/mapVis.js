@@ -16,7 +16,7 @@ class MapVis {
         let vis = this;
 
         //defining margins and width / height of the space
-        vis.margin = {top: 20, right: 20, bottom: 20, left: 20};
+        vis.margin = {top: -10, right: 20, bottom: 20, left: 20};
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
@@ -29,7 +29,7 @@ class MapVis {
 
         //pixel values of projection
         //might need to adjust the pixel values
-        vis.viewpoint = {'width': 975, 'height': 610};
+        vis.viewpoint = {'width': 975, 'height': 500};
         vis.zoom = vis.width / vis.viewpoint.width;
 
         //geometry of the USA
@@ -54,6 +54,7 @@ class MapVis {
             .append("path")
             .attr('class', 'states')
             .attr('stroke', 'black')
+            .attr('fill', 'white') //--> would need to change fill but for now for it to show me the states
             .attr("d", vis.path);
 
         vis.wrangleData();
