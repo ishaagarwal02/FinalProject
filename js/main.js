@@ -7,14 +7,17 @@ let promises = [
 ]
 
 Promise.all(promises)
-<<<<<<< Updated upstream
-    .then(function(){})
-=======
+  
     .then(function(data){
         console.log(data)
         initMainPage(data)
     })
->>>>>>> Stashed changes
+
     .catch(function (err){
         console.log(err)
     });
+
+function initMainPage(allDataArray){
+    usaMap = new MapVis('mapDiv', allDataArray[0])
+
+};
