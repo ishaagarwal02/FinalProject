@@ -22,8 +22,9 @@ Promise.all(promises)
 
 //initializing the main page of the website
 function initMainPage(allDataArray){
-    usaMap = new MapVis('mapDiv', allDataArray[0])
+    usaMap = new MapVis('mapDiv', allDataArray[0], allDataArray[1])
     matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
+    console.log(allDataArray[1])
 
 };
 
