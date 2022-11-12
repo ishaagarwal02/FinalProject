@@ -39,5 +39,6 @@ function switchMatrixView() {
 //category change for the map selector
 function categoryChange(){
     selectedCategory =  document.getElementById('mapCategorySelector').value;
+    usaMap.wrangleData();
 
 }

@@ -87,30 +87,33 @@ class MapVis {
 
         DatabyState.forEach(state => {
             //init counters
+            let counter = 0; //counter to get averages
+
+            //interesting values
             let ACTMedian = 0;
-            let counter = 0;
             let AdmissionRate = 0;
+            let TotalApps = 0;
+
+            //looping over the states to get sums per state
 
             state.value.forEach(entry => {
                 ACTMedian += +entry['ACTMedian']
                 AdmissionRate += +entry['AdmissionRate']
+                TotalApps += +entry['Applicants total_x']
                 counter += 1
             })
 
+            //pushing the information into the new dataset
             vis.stateInfo.push({
                 state: state.key,
                 AverageACT: ACTMedian / counter,
-                AvgAdmissionRate: AdmissionRate / counter * 100
+                AvgAdmissionRate: AdmissionRate / counter * 100,
+                TotalApps: TotalApps / counter,
+                NumColleges: counter
             })
         })
 
         console.log(vis.stateInfo)
-
-
-
-
-
-
 
 
         vis.updateVis();
@@ -123,9 +126,19 @@ class MapVis {
 
         console.log(vis.stateInfo[1]['AverageACT'])
 
-        vis.colors.domain([0,d3.max(vis.stateInfo, d => d['AverageACT'])])
+        vis.colors.domain([0,d3.max(vis.stateInfo, d => d[selectedCategory])])
 
        // console.log(vis.colors.domain)
+        vis.states.attr("fill", function(d){
+            vis.stateInfo.forEach(state => {
+                if (state.state == d.properties.name){
+                    //console.log(state.state)
+                    // console.log(state.absCases)
+                    assignColor = vis.colors(state[selectedCategory])
+                }
+            })
+            return assignColor;
+        })
 
             //  vis.states.attr('fill', d => vis.colors(d['AverageACT']))
 
