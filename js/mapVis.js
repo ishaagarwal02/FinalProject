@@ -58,6 +58,11 @@ class MapVis {
             .attr('fill', 'white') //--> would need to change fill but for now for it to show me the states
             .attr("d", vis.path);
 
+        //creating a color scale for the fill of map
+        //6a1370
+        vis.colors = d3.scaleLinear().range(["#FFFFFF", "#6A1370"])
+
+
         vis.wrangleData();
     }
 
@@ -87,6 +92,7 @@ class MapVis {
 
             state.value.forEach(entry => {
                 ACTMedian += +entry['ACTMedian']
+                counter += 1
             })
 
             vis.stateInfo.push({
@@ -108,6 +114,18 @@ class MapVis {
     }
 
     updateVis(){
+
+        let vis = this;
+        let assignColor = '';
+
+        console.log(vis.stateInfo[1]['AverageACT'])
+
+        //vis.colors.domain([0,d3.max(vis.stateInfo, d => d['AverageACT'])])
+
+       // console.log(vis.colors.domain)
+
+       // vis.states.attr('fill', d=> vis.colors(d['AverageACT']))
+
 
 
     }

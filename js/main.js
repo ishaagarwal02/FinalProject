@@ -1,6 +1,9 @@
 let usaMap;
 let matrixChart;
 
+let selectedCategory =  document.getElementById('mapCategorySelector').value;
+
+
 //uploading the data
 let promises = [
     //JSON States map projection
@@ -35,5 +38,6 @@ function switchMatrixView() {
 
 //category change for the map selector
 function categoryChange(){
+    selectedCategory =  document.getElementById('mapCategorySelector').value;
 
 }
