@@ -83,14 +83,16 @@ class MapVis {
         DatabyState.forEach(state => {
             //init counters
             let ACTMedian = 0;
+            let counter = 0;
 
             state.value.forEach(entry => {
                 ACTMedian += +entry['ACTMedian']
+                counter += 1
             })
 
             vis.stateInfo.push({
                 state: state.key,
-                MedianACT: ACTMedian //this is a sum, need to make it an average
+                AverageACT: ACTMedian / counter
             })
         })
 
