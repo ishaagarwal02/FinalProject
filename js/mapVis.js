@@ -4,10 +4,9 @@
 
 
 class MapVis {
-    constructor(parentElement, geoData, collegeData){
+    constructor(parentElement, geoData){
         this.parentElement = parentElement;
         this.geoData = geoData;
-        this.collegeData = collegeData;
         this.displayData = []
 
         this.initVis()
@@ -64,52 +63,11 @@ class MapVis {
     wrangleData(){
         let vis = this;
 
-        let filteredData = [];
-        //State abbreviation_x is the state abbreviation 2 letters
-        //State abbreviation_y is the full name
-
-        filteredData = vis.collegeData;
-
-        console.log(filteredData)
-
-        //console.log(filteredData['SATAverage'])
-
-        let DatabyState = Array.from(d3.group(filteredData, d => d['State abbreviation_y']), ([key, value]) => ({key, value}));
-
-        console.log(DatabyState)
-
-        vis.stateInfo = []
-
-        DatabyState.forEach(state => {
-            //init counters
-            let ACTMedian = 0;
-            let counter = 0;
-
-            state.value.forEach(entry => {
-                ACTMedian += +entry['ACTMedian']
-                counter += 1
-            })
-
-            vis.stateInfo.push({
-                state: state.key,
-                AverageACT: ACTMedian / counter
-            })
-        })
-
-        console.log(vis.stateInfo)
-
-
-
-
-
-
-
 
         vis.updateVis();
     }
 
     updateVis(){
-
 
     }
 }
