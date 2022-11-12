@@ -120,13 +120,11 @@ class MapVis {
 
         console.log(vis.stateInfo[1]['AverageACT'])
 
-        //vis.colors.domain([0,d3.max(vis.stateInfo, d => d['AverageACT'])])
+        vis.colors.domain([0,d3.max(vis.stateInfo, d => d['AverageACT'])])
 
        // console.log(vis.colors.domain)
 
-       // vis.states.attr('fill', d=> vis.colors(d['AverageACT']))
-
-
+            //  vis.states.attr('fill', d => vis.colors(d['AverageACT']))
 
     }
 }
