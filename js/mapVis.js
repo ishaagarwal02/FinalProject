@@ -89,15 +89,18 @@ class MapVis {
             //init counters
             let ACTMedian = 0;
             let counter = 0;
+            let AdmissionRate = 0;
 
             state.value.forEach(entry => {
                 ACTMedian += +entry['ACTMedian']
+                AdmissionRate += +entry['AdmissionRate']
                 counter += 1
             })
 
             vis.stateInfo.push({
                 state: state.key,
-                AverageACT: ACTMedian / counter
+                AverageACT: ACTMedian / counter,
+                AvgAdmissionRate: AdmissionRate / counter * 100
             })
         })
 
