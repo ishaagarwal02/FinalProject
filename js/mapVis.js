@@ -62,6 +62,13 @@ class MapVis {
         //6a1370
         vis.colors = d3.scaleLinear().range(["#FFFFFF", "#6A1370"])
 
+        //creating a tooltip:
+        vis.tooltip = d3.select("body").append('div')
+            .attr('class', "tooltip")
+            .attr('id', 'mapTooltip');
+
+
+
 
         vis.wrangleData();
     }
@@ -114,6 +121,8 @@ class MapVis {
         })
 
         console.log(vis.stateInfo)
+        //IDEA: add some sort of filtering by like ivy leagues or top 20 schools or something to make some of the data
+        //more interesting.
 
 
         vis.updateVis();
@@ -141,6 +150,48 @@ class MapVis {
         })
 
             //  vis.states.attr('fill', d => vis.colors(d['AverageACT']))
+
+        //utilizing the tooltip:
+        vis.states.on('mouseover', function(event,d){
+            d3.select(this)
+                .attr('stroke-width', '2px')
+                .attr('stroke', 'black')
+                .attr('fill', 'rgba(100,100,100,0.62)')
+
+            let stateMouseOver = vis.stateInfo.find(obj => obj.state === d.properties.name)
+//need to fix formatting on Average ACT and Total Number of Applicants --> round
+            vis.tooltip
+                .style("opacity", 1)
+                .style("left", event.pageX + 20 + "px")
+                .style("top", event.pageY + "px")
+                .html(`
+         <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 20px">
+             <h3> State: ${d.properties.name}<h3>
+             <h4> Average ACT: ${stateMouseOver.AverageACT}</h4>   
+             <h4> Average Admissions Rate: ${d3.format("0.3")(stateMouseOver.AvgAdmissionRate)}%</h4>  
+             <h4> Total Number of Applicants: ${stateMouseOver.TotalApps}</h4>    
+             <h4> Number of Colleges: ${stateMouseOver.NumColleges}</h4>    
+  
+
+         </div>`);
+        }).on('mouseout', function(event, d){
+            d3.select(this)
+                .attr("fill", function(d){
+                    vis.stateInfo.forEach(state => {
+                        if (state.state == d.properties.name){
+                            assignColor = vis.colors(state[selectedCategory])
+                        }
+                    })
+                    return assignColor;
+                })
+
+            vis.tooltip
+                .style("opacity", 0)
+                .style("left", 0)
+                .style("top", 0)
+                .html(``);
+        })
+
 
     }
 }
