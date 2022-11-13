@@ -154,7 +154,7 @@ class MapVis {
         //utilizing the tooltip:
         vis.states.on('mouseover', function(event,d){
             d3.select(this)
-                .attr('stroke-width', '2px')
+               // .attr('stroke-width', '2px')
                 .attr('stroke', 'black')
                 .attr('fill', 'rgba(100,100,100,0.62)')
 
