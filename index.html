@@ -25,9 +25,19 @@
 
 
       <!-- Visualizations -->
+      <!-- Need to make this smaller somehow -->
+      <div class="row justify-content-center" style="height: 100%">
+        <select id='mapCategorySelector' class="custom-select align-self-center" style="width: 50%" onchange="categoryChange()">
+          <option value="fill1" selected>Value 1</option>
+          <option value="fill2">Value 2</option>
+          <option value="fill3">Value 3</option>
+          <option value="fill4">Value 4</option>
+        </select>
+      </div>
       <div class="row"
            style="height: 100vh; padding-top: 0; padding-left: 1vh; padding-right: 1vh; padding-bottom: 1vh">
         <div class="col">
+
           <div class="row"
                style="border: thin solid rgba(211,211,211,0.73); border-radius: 5px; background: rgba(214,226,233,0.42)">
                 <div id="mapDiv" style="height: 98vh; width: 100%;"></div>
