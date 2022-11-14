@@ -1,5 +1,6 @@
 let usaMap;
 let matrixChart;
+let bubbleChart;
 
 let promises = [
     //JSON States map projection
@@ -19,11 +20,17 @@ Promise.all(promises)
     });
 
 function initMainPage(allDataArray){
-    usaMap = new MapVis('mapDiv', allDataArray[0])
-    matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
+    usaMap = new MapVis('mapDiv', allDataArray[0]);
+    //matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
+    bubbleChart = new BubbleVis('bubbleDiv', allDataArray[1]);
+}
 
-};
-
-function switchMatrixView() {
+/*function switchMatrixView() {
     matrixChart.updateChart();
+}*/
+
+function categoryChange() {
+    // Wrangle data each time the dropdown menu gets changed (triggered in index.html)
+    bubbleChart.wrangleData()
+    console.log("category change happened");
 }
