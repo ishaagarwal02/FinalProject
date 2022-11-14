@@ -1,8 +1,6 @@
 let usaMap;
 let matrixChart;
-
-let selectedCategory =  document.getElementById('mapCategorySelector').value;
-
+let bubbleChart;
 
 //uploading the data
 let promises = [
@@ -18,7 +16,6 @@ Promise.all(promises)
         console.log(data)
         initMainPage(data)
     })
-
     .catch(function (err){
         console.log(err)
     });
@@ -26,8 +23,10 @@ Promise.all(promises)
 //initializing the main page of the website
 function initMainPage(allDataArray){
     usaMap = new MapVis('mapDiv', allDataArray[0], allDataArray[1])
-    matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
     console.log(allDataArray[1])
+    //matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
+    bubbleChart = new BubbleVis('bubbleDiv', allDataArray[1]);
+
 
 };
 
@@ -38,7 +37,7 @@ function switchMatrixView() {
 
 //category change for the map selector
 function categoryChange(){
-    selectedCategory =  document.getElementById('mapCategorySelector').value;
-    usaMap.wrangleData();
-
+    // Wrangle data each time the dropdown menu gets changed (triggered in index.html)
+    bubbleChart.wrangleData()
+    console.log("category change happened");
 }
