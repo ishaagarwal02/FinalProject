@@ -1,5 +1,6 @@
 let usaMap;
 let matrixChart;
+let radar1;
 
 let selectedCategory =  document.getElementById('mapCategorySelector').value;
 
@@ -26,6 +27,7 @@ Promise.all(promises)
 //initializing the main page of the website
 function initMainPage(allDataArray){
     usaMap = new MapVis('mapDiv', allDataArray[0], allDataArray[1])
+    radar1 = new RadarVis('radarDiv', allDataArray[1])
     matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
     console.log(allDataArray[1])
 
