@@ -1,6 +1,7 @@
 let usaMap;
 let matrixChart;
 let bubbleChart;
+let selectedCategory =  document.getElementById('mapCategorySelector').value;
 
 //uploading the data
 let promises = [
@@ -37,7 +38,10 @@ function switchMatrixView() {
 
 //category change for the map selector
 function categoryChange(){
+    selectedCategory =  document.getElementById('mapCategorySelector').value;
+
     // Wrangle data each time the dropdown menu gets changed (triggered in index.html)
+    usaMap.wrangleData()
     bubbleChart.wrangleData()
     console.log("category change happened");
 }
