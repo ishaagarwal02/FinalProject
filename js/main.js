@@ -2,6 +2,7 @@ let usaMap;
 let matrixChart;
 let bubbleChart;
 let selectedCategory =  document.getElementById('mapCategorySelector').value;
+let radar1;
 
 //uploading the data
 let promises = [
@@ -24,6 +25,8 @@ Promise.all(promises)
 //initializing the main page of the website
 function initMainPage(allDataArray){
     usaMap = new MapVis('mapDiv', allDataArray[0], allDataArray[1])
+    radar1 = new RadarVis('radarDiv', allDataArray[1])
+
     console.log(allDataArray[1])
     //matrixChart = new MatrixChart('matrixvis', allDataArray[1]);
     bubbleChart = new BubbleVis('bubbleDiv', allDataArray[1]);
