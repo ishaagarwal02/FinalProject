@@ -1,10 +1,5 @@
-@font-face {
-    font-family: "CustomFont";
-    url("font/static/Montserrat-Black.ttf") format("truetype"),
-}
-
 body {
-    font-family: 'CustomFont', Montserrat, sans-serif;
+    font-family: Montserrat, sans-serif;
 }
 
 .tooltip {
