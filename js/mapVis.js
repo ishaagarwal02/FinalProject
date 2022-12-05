@@ -17,9 +17,10 @@ class MapVis {
         let vis = this;
 
         //defining margins and width / height of the space
-        vis.margin = {top: -10, right: 20, bottom: 20, left: 20};
+        vis.margin = {top: -10, right: 20, bottom: 30, left: 200};
         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
+        console.log(vis.width)
 
         // init drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -29,13 +30,8 @@ class MapVis {
 
 
         //pixel values of projection
-        //might need to adjust the pixel values
-        vis.viewpoint = {'width': 975, 'height': 500};
+        vis.viewpoint = {'width': vis.width*1.1, 'height': vis.width*2.15};
         vis.zoom = vis.width / vis.viewpoint.width;
-
-        //geometry of the USA
-        //topo json -> geo json
-        //console.log(vis.usa)
 
         // adjust map position - map contains all the state groups
         vis.map = vis.svg.append("g")// group will contain all state paths
@@ -55,19 +51,46 @@ class MapVis {
             .append("path")
             .attr('class', 'states')
             .attr('stroke', 'black')
-            .attr('fill', 'white') //--> would need to change fill but for now for it to show me the states
+            .attr('fill', 'white')
             .attr("d", vis.path);
 
         //creating a color scale for the fill of map
-        //6a1370
-        vis.colors = d3.scaleLinear().range(["#FFFFFF", "#6A1370"])
+        vis.colors = d3.scaleLinear().range(["#FFFFFF", "#00205b"])
 
         //creating a tooltip:
         vis.tooltip = d3.select("body").append('div')
             .attr('class', "tooltip")
             .attr('id', 'mapTooltip');
 
+        //creating a legend
+        vis.legendScale = d3.scaleLinear()
+            .range([0, vis.width/2]);
 
+        vis.legendAxis = d3.axisBottom()
+            .scale(vis.legendScale)
+            .ticks(4);
+
+        // Adds the legend group
+        vis.legendGroup = vis.svg.append('g')
+            .attr('class', 'legend')
+            .attr('transform', `translate(${vis.width /5}, ${vis.height - 5*vis.margin.bottom})`)
+
+        let legendColorScale = d3.scaleSequential()
+            .interpolator(d3.interpolate('#FFFFFF', '#00205b'))
+            .domain([0, 50]);
+
+        let gradientRange = d3.range(60);
+
+        vis.legend = vis.legendGroup.selectAll('.rects')
+            .data(gradientRange)
+            .enter()
+            .append('rect')
+            .attr('y', -25)
+            .attr('height', 25)
+            .attr('x', (d, i) => i * (vis.width/120))
+            .attr('width', vis.width/120)
+            .attr('fill', d => legendColorScale(d))
+            .attr('class', 'rects')
 
 
         vis.wrangleData();
@@ -82,13 +105,11 @@ class MapVis {
 
         filteredData = vis.collegeData;
 
-        console.log(filteredData)
 
-        //console.log(filteredData['SATAverage'])
-
+        //aggregating data over states
         let DatabyState = Array.from(d3.group(filteredData, d => d['State abbreviation_y']), ([key, value]) => ({key, value}));
 
-        console.log(DatabyState)
+       // console.log(DatabyState)
 
         vis.stateInfo = []
 
@@ -120,9 +141,6 @@ class MapVis {
             })
         })
 
-        console.log(vis.stateInfo)
-        //IDEA: add some sort of filtering by like ivy leagues or top 20 schools or something to make some of the data
-        //more interesting.
 
 
         vis.updateVis();
@@ -133,23 +151,20 @@ class MapVis {
         let vis = this;
         let assignColor = '';
 
-        console.log(vis.stateInfo[1]['AverageACT'])
+        //assigning colors to states based on the selected category and ranges
+        vis.colors.domain([0,d3.max(vis.stateInfo, d => d[selectedCategory_map])])
 
-        vis.colors.domain([0,d3.max(vis.stateInfo, d => d[selectedCategory])])
-
-       // console.log(vis.colors.domain)
         vis.states.attr("fill", function(d){
             vis.stateInfo.forEach(state => {
                 if (state.state == d.properties.name){
                     //console.log(state.state)
                     // console.log(state.absCases)
-                    assignColor = vis.colors(state[selectedCategory])
+                    assignColor = vis.colors(state[selectedCategory_map])
                 }
             })
             return assignColor;
         })
 
-            //  vis.states.attr('fill', d => vis.colors(d['AverageACT']))
 
         //utilizing the tooltip:
         vis.states.on('mouseover', function(event,d){
@@ -167,10 +182,10 @@ class MapVis {
                 .html(`
          <div style="border: thin solid grey; border-radius: 5px; background: lightgrey; padding: 20px">
              <h3> State: ${d.properties.name}<h3>
-             <h4> Average ACT: ${stateMouseOver.AverageACT}</h4>   
-             <h4> Average Admissions Rate: ${d3.format("0.3")(stateMouseOver.AvgAdmissionRate)}%</h4>  
-             <h4> Total Number of Applicants: ${stateMouseOver.TotalApps}</h4>    
              <h4> Number of Colleges: ${stateMouseOver.NumColleges}</h4>    
+             <h4> Average ACT: ${d3.format("0.3")(stateMouseOver.AverageACT)}</h4>   
+             <h4> Average Admissions Rate: ${d3.format("0.3")(stateMouseOver.AvgAdmissionRate)}%</h4>  
+             <h4> Average Number of Applicants: ${d3.format("0.6")(stateMouseOver.TotalApps)}</h4>    
   
 
          </div>`);
@@ -179,7 +194,7 @@ class MapVis {
                 .attr("fill", function(d){
                     vis.stateInfo.forEach(state => {
                         if (state.state == d.properties.name){
-                            assignColor = vis.colors(state[selectedCategory])
+                            assignColor = vis.colors(state[selectedCategory_map])
                         }
                     })
                     return assignColor;
@@ -191,6 +206,11 @@ class MapVis {
                 .style("top", 0)
                 .html(``);
         })
+
+        // Updates domains
+        vis.legendScale.domain([0, d3.max(vis.stateInfo, d => d[selectedCategory_map])]);
+
+        vis.legendGroup.call(vis.legendAxis);
 
 
     }
